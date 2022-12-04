@@ -1,4 +1,6 @@
-﻿using UIQ_CronTab_Console.Services.Interfaces;
+﻿using UIQ_CronTab_Console.Enums;
+using UIQ_CronTab_Console.Models.ApiRequest;
+using UIQ_CronTab_Console.Services.Interfaces;
 
 namespace UIQ_CronTab_Console
 {
@@ -18,11 +20,27 @@ namespace UIQ_CronTab_Console
             _makeDailyLogService = makeDailyLogService;
         }
 
-        public async Task Run(string[] args)
+        public async Task RunAsync(string[] args)
         {
             if (args.Any() == false) return;
 
+            switch (args.FirstOrDefault())
+            {
+                case nameof(ServiceTypeEnum.SqlSync):
+                    await _sqlSyncService.SqlSyncAsync(new SqlSyncRequest { HostName = (args.ElementAtOrDefault(1) ?? string.Empty) });
+                    return;
 
+                case nameof(ServiceTypeEnum.ParseLog): await _parseLogService.ParseLogAsync(); return;
+
+                case nameof(ServiceTypeEnum.PhaseLog):
+                    var fileDate = DateTime.TryParse(args.ElementAtOrDefault(1), out var tmpFileDate) ? (DateTime?)tmpFileDate : null;
+                    await _phaseLogService.PhaseLogAsync(new PhaseLogRequest { FileDate = fileDate });
+                    return;
+
+                case nameof(ServiceTypeEnum.MakeDailyLog): await _makeDailyLogService.MakeDailyLogAsync(); return;
+
+                default: return;
+            }
         }
     }
 }
