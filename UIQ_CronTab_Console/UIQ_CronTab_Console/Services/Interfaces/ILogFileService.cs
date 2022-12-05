@@ -8,6 +8,8 @@
 
         public Task WriteDataIntoLogFileAsync(string directoryPath, string fullFilePath, string newData);
 
+        public Task WriteUiErrorLogFileAsync(string message);
+
         public Task WriteUiTransationLogFileAsync(string content);
     }
 }

@@ -13,9 +13,9 @@ namespace UIQ_CronTab_Console.Services
             get
             {
 #if DEBUG
-                return Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                return Directory.GetCurrentDirectory();
 #endif
-                return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "wwwroot");
+                return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             }
         }
 
